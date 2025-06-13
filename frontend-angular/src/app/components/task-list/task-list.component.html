@@ -1,0 +1,64 @@
+<div class="task-list-container">
+  <!-- Loading spinner -->
+  <div *ngIf="loading" class="loader">
+    <div class="spinner"></div>
+    <p>Loading your tasks...</p>
+  </div>
+
+  <!-- Task list -->
+  <div *ngIf="!loading">
+    <h1 class="main-title">Hey! - You've got {{ tasks.length }} active tasks 🥁</h1>
+    
+    <div class="tasks-container">
+      <div 
+        cdkDropList 
+        class="task-list" 
+        (cdkDropListDropped)="drop($event)"
+        [cdkDropListData]="tasks">
+        
+        <div 
+          *ngFor="let task of tasks" 
+          cdkDrag 
+          class="task-item">
+          
+          <div class="task-content">
+            <div class="task-details">
+              <h3 class="task-title">{{ task.title }}</h3>
+              <p class="task-description" *ngIf="task.description">{{ task.description }}</p>
+            </div>
+            
+            <div class="task-actions">
+              <button 
+                class="action-btn edit-btn" 
+                (click)="onEditTask(task)"
+                title="Edit task">
+                ✏️
+              </button>
+              <button 
+                class="action-btn delete-btn" 
+                (click)="onDeleteTask(task.id)"
+                title="Delete task">
+                🗑️
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="add-btn" (click)="onAddTask()" title="Add new task">
+        <span class="plus-icon">+</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Task form popover -->
+  <div *ngIf="showForm" class="popover-overlay" (click)="onFormCancel()">
+    <div class="popover-content" (click)="$event.stopPropagation()">
+      <app-task-form 
+        [task]="editingTask"
+        (taskSubmitted)="onFormSubmit($event)"
+        (cancelled)="onFormCancel()">
+      </app-task-form>
+    </div>
+  </div>
+</div>
