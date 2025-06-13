@@ -30,8 +30,8 @@ docker compose -f docker-compose.dev.yml up
 This will start:
 
 - PostgreSQL on port 5432  
-- Express backend on port 3000  
-- Angular frontend on port 4200
+- Express backend on port 3000: http://localhost:3000/api/tasks
+- Angular frontend on port 4200: http://localhost:4200
 
 ### 3. Stop services
 
