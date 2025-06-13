@@ -1,0 +1,58 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: checklist_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - checklist-network
+
+  backend:
+    build:
+      context: ./backend-express
+      dockerfile: Dockerfile.dev  # Separate development Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: checklist_db
+      DB_USER: postgres
+      DB_PASSWORD: password
+      PORT: 3000
+      NODE_ENV: development
+    depends_on:
+      - postgres
+    networks:
+      - checklist-network
+    volumes:
+      - ./backend-express:/app
+      - /app/node_modules
+    command: npm run dev  # Use nodemon or similar for hot reload
+
+  frontend:
+    build:
+      context: ./frontend-angular
+      dockerfile: Dockerfile.dev  # Separate development Dockerfile
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend-angular:/app
+      - /app/node_modules
+    networks:
+      - checklist-network
+    depends_on:
+      - backend
+    command: npm start  # Angular dev server
+
+volumes:
+  postgres_data:
+
+networks:
+  checklist-network:
+    driver: bridge
