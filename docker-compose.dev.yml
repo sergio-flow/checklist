@@ -33,7 +33,6 @@ services:
     volumes:
       - ./backend-express:/app
       - /app/node_modules
-    command: npm run dev  # Use nodemon or similar for hot reload
 
   frontend:
     build:
@@ -48,7 +47,6 @@ services:
       - checklist-network
     depends_on:
       - backend
-    command: npm start  # Angular dev server
 
 volumes:
   postgres_data:
