@@ -33,7 +33,7 @@ services:
     volumes:
       - ./backend-express:/app
       - /app/node_modules
-    command: sh -c "npm run migrate && npm start"
+    command: sh -c "./wait-for-postgres.sh postgres 5432 && npm run migrate && npm start"
 
   frontend:
     build:
