@@ -10,5 +10,23 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  backend:
+    build: ./backend-express
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: checklist_db
+      DB_USER: postgres
+      DB_PASSWORD: password
+      PORT: 3000
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend-express:/app
+      - /app/node_modules
+    command: sh -c "npm run migrate && npm start"
+
 volumes:
   postgres_data:
